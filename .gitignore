@@ -1,0 +1,55 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.env/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+*.egg-info/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
+
+# macOS files
+.DS_Store
+
+# PyCharm
+.idea/
+
+# Model files
+*.pkl
+*.h5
+*.joblib
+
+# Audio or large datasets (add folders you don't want to push)
+*.wav
+*.mp3
+*.flac
+*.zip
+*.tar.gz
+audio_and_txt_files/
+data/
+datasets/
+*.csv
+
+# Conda / pip files
+*.log
+*.bak
+pip-wheel-metadata/
+__pypackages__/
+
+# System files
+Thumbs.db
+ehthumbs.db
+
+# Kaggle / cache
+.kaggle/
+.cache/

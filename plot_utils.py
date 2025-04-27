@@ -1,42 +1,62 @@
-# File: plot_utils.py
-
+# ================= plot_utils.py =================
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve
 from sklearn.preprocessing import label_binarize
 import numpy as np
 
-
 def plot_precision_recall_curves(y_test, y_pred_prob, class_names):
     """
-    Plot precision-recall curves for multi-class predictions.
-    
-    Parameters:
-        y_test: array-like, shape (n_samples,) or (n_samples, n_classes)
-        y_pred_prob: array-like, shape (n_samples, n_classes)
-        class_names: list of class names, length n_classes
+    Plots Precision-Recall curves for each class present in y_test.
     """
-    # Determine number of classes
-    n_classes = y_pred_prob.shape[1]
+    # determine which classes actually appear in y_test
+    present_classes = np.unique(y_test)
+    n_classes = len(present_classes)
 
-    # Binarize y_test if it's a 1D array of class labels
-    if y_test.ndim == 1:
-        y_test_binarized = label_binarize(y_test, classes=np.arange(n_classes))
-    else:
-        y_test_binarized = y_test
+    # binarize only over the present classes
+    y_test_binarized = label_binarize(y_test, classes=present_classes)
 
-    # Plot each class
+    # check that y_pred_prob matches the number of present classes
+    if y_pred_prob.shape[1] != n_classes:
+        print(f"[Warning] Skipping PR curve: y_pred_prob has {y_pred_prob.shape[1]} columns, "
+              f"but only {n_classes} classes are present in y_test.")
+        return
+
     plt.figure(figsize=(12, 8))
-    for i, label in enumerate(class_names):
+    for idx, cls in enumerate(present_classes):
         precision, recall, _ = precision_recall_curve(
-            y_test_binarized[:, i], y_pred_prob[:, i]
+            y_test_binarized[:, idx],
+            y_pred_prob[:, idx]
         )
-        plt.plot(recall, precision, lw=2, label=f'{label}')
+        plt.plot(recall, precision, lw=2, label=f"{class_names[cls]}")
 
-    # Formatting
     plt.xlabel('Recall', fontsize=14)
     plt.ylabel('Precision', fontsize=14)
-    plt.title('Precision-Recall Curves for Each Class', fontsize=16)
+    plt.title('Precision-Recall Curves for Present Classes', fontsize=16)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize='medium')
     plt.grid(True)
     plt.tight_layout(rect=[0, 0, 0.8, 1])
+    plt.show()
+
+
+def plot_model_comparison(model_names, accuracies):
+    """
+    Plots a bar chart comparing accuracies of multiple models.
+    - model_names: list of strings
+    - accuracies: list of floats (same length as model_names)
+    """
+    assert len(model_names) == len(accuracies), "names & accuracies must match length"
+
+    plt.figure(figsize=(12, 6))
+    bars = plt.bar(model_names, accuracies,
+                   color=['blue','green','magenta','purple','cyan','orange','red','gray'][:len(model_names)])
+    plt.xticks(rotation=45, ha='right')
+    plt.ylabel('Accuracy (%)')
+    plt.title('Model Performance Comparison')
+    plt.ylim(0, 100)
+
+    for bar in bars:
+        h = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, h + 1, f"{h:.2f}%", ha='center')
+
+    plt.tight_layout()
     plt.show()

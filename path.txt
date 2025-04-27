@@ -1,0 +1,12 @@
+   audio_dir = (
+        '/home/aaryash/.cache/kagglehub/datasets/vbookshelf/'
+        'respiratory-sound-database/versions/2/'
+        'Respiratory_Sound_Database/Respiratory_Sound_Database/'
+        'audio_and_txt_files'
+    )
+    metadata_file = (
+        '/home/aaryash/.cache/kagglehub/datasets/vbookshelf/'
+        'respiratory-sound-database/versions/2/'
+        'Respiratory_Sound_Database/Respiratory_Sound_Database/'
+        'patient_diagnosis.csv'
+    )
